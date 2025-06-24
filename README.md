@@ -11,13 +11,14 @@ Aplikasi ini masih dalam tahap pembelajaran, dan aku sangat senang bisa berbagi 
 - body-parser, cors, dotenv
 
 ## 📁 Struktur Folder
-simple_todo_rest_api/
-├── controllers/ # Tempat logika bisnis CRUD
-├── routes/ # Endpoint REST API
-├── public/ # File HTML statis untuk testing frontend
-├── .env # Konfigurasi lingkungan (misal: koneksi database)
-├── server.js # Poin utama aplikasi
-└── README.md
+      ```bash
+      simple_todo_rest_api/
+      ├── controllers/ # Tempat logika bisnis CRUD
+      ├── routes/ # Endpoint REST API
+      ├── public/ # File HTML statis untuk testing frontend
+      ├── .env # Konfigurasi lingkungan (misal: koneksi database)
+      ├── server.js # Poin utama aplikasi
+      └── README.md
 
 ## 🏃‍♂️ Cara Menjalankan Proyek
 1. **Clone Repo Ini**
@@ -27,9 +28,9 @@ simple_todo_rest_api/
     ```bash
     npm install
 4. Konfigurasi Database
-   -Pastikan kamu sudah menjalankan XAMPP dan mengaktifkan MySQL.
-   -Buat database baru bernama todo_db.
-   -Salin file .env.example menjadi .env
+   - Pastikan kamu sudah menjalankan XAMPP dan mengaktifkan MySQL.
+   - Buat database baru bernama todo_db.
+   - Salin file .env.example menjadi .env
 5. table database
    ```bash
    CREATE TABLE todos (
