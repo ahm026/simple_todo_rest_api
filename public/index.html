@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 8px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+        li {
+            margin-top: 10px;
+        }
+        .done {
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <input type="text" id="taskInput" placeholder="Tambahkan tugas baru..." />
+    <button onclick="addTask()">Add</button>
+    <ul id="list"></ul>
+
+    <script>
+        // Muat semua tugas dari API
+        async function loadTasks() {
+            try {
+                const res = await fetch('/api/todos');
+                const todos = await res.json();
+
+                const ul = document.getElementById('list');
+                ul.innerHTML = '';
+
+                todos.forEach(t => {
+                    const li = document.createElement('li');
+
+                    li.innerHTML = `
+                        <input type="checkbox"
+                            ${t.completed ? 'checked' : ''}
+                            onchange="toggleCompleted(${t.id}, this.checked)" />
+                        <span class="${t.completed ? 'done' : ''}">${t.task}</span>
+                        <button onclick="deleteTask(${t.id})">Delete</button>
+                    `;
+                    ul.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Gagal memuat tugas:', error);
+            }
+        }
+
+        // Tambahkan tugas baru
+        async function addTask() {
+            const taskInput = document.getElementById('taskInput');
+            const task = taskInput.value.trim();
+
+            if (!task) {
+                alert('Harap masukkan isi tugas!');
+                return;
+            }
+
+            await fetch('/api/todos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ task })
+            });
+
+            taskInput.value = '';
+            loadTasks();
+        }
+
+        // Hapus tugas
+        async function deleteTask(id) {
+            if (confirm('Yakin ingin menghapus tugas ini?')) {
+                await fetch(`/api/todos/${id}`, { method: 'DELETE' });
+                loadTasks();
+            }
+        }
+
+        // Ubah status completed
+        async function toggleCompleted(id, completed) {
+            await fetch(`/api/todos/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed }) // hanya ubah status completed
+            });
+            loadTasks();
+        }
+
+        // Jalankan saat halaman pertama kali dimuat
+        loadTasks();
+    </script>
+</body>
+</html>
